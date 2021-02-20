@@ -6,7 +6,7 @@ if(isset($_POST['form1'])) {
 
     if(empty($_POST['category_name'])) {
         $valid = 0;
-        $error_message .= "Category Name can not be empty<br>";
+        $error_message .= "Название категории не может быть пустым<br>";
     } else {
 		// Duplicate Category checking
     	// current category name that is in the database
@@ -49,7 +49,7 @@ if(isset($_POST['form1'])) {
 		$statement = $pdo->prepare("UPDATE tbl_category SET category_name=?, category_slug=?, meta_title=?, meta_keyword=?, meta_description=? WHERE category_id=?");
 		$statement->execute(array($_POST['category_name'],$category_slug,$_POST['meta_title'],$_POST['meta_keyword'],$_POST['meta_description'],$_REQUEST['id']));
 
-    	$success_message = 'Category is updated successfully.';
+    	$success_message = 'Категория успешно обновлена.';
     }
 }
 ?>
@@ -73,10 +73,10 @@ if(!isset($_REQUEST['id'])) {
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Edit Category</h1>
+		<h1>Изменить категорию</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="category.php" class="btn btn-primary btn-sm">View All</a>
+		<a href="category.php" class="btn btn-primary btn-sm">Посмотреть все</a>
 	</div>
 </section>
 
