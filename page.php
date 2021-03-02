@@ -1215,17 +1215,47 @@ if(isset($_POST['form_reservation']))
         mail($to_admin, $subject, $message, $headers); 
 		
         $success_message1 = $reservation_form_email_thank_you_message;
+		
+		// saving into the database	
+		try{
+			$user_id = null;
+			if(isset($_SESSION['user'])){
+				$user_id = $_SESSION['user']['id'];
+			}
 
+			$date_array = explode('/', $visitor_date);
+			$correct_date = date_create($date_array[2].'-'.$date_array[1].'-'.$date_array[0]);
+			$statement = $pdo->prepare("INSERT INTO tbl_bron (first_name, last_name, user_id, email, phone, date, time, message) VALUES (?,?,?,?,?,?,?,?)");
+			$statement->execute(array($visitor_first_name, $visitor_last_name, $user_id, $visitor_email, $visitor_phone, $correct_date->getTimestamp(), $visitor_time, $visitor_comment));
+		}
+		catch (Exception $ex)
+		{
+			$error_message1 .= $ex->getMessage();
+		}
     }
 }
 ?>
 				
 				<?php
 				if($error_message1 != '') {
-					echo "<script>alert('".$error_message1."')</script>";
+					echo "<script>alert(\"".$error_message1."\")</script>";
 				}
+				else
 				if($success_message1 != '') {
 					echo "<script>alert('".$success_message1."')</script>";
+				}
+
+				$first_name='';
+				$last_name='';
+				$email='';
+				if(isset($_SESSION['user'])){
+					$email = $_SESSION['user']['email'];
+
+					$names = explode(' ', $_SESSION['user']['full_name']);
+					$first_name = $names[0];
+					if(count($names) > 1){
+						$last_name = $names[1];
+					}
 				}
 				?>
 <section class="contact">
@@ -1242,17 +1272,17 @@ if(isset($_POST['form_reservation']))
 					<?php $csrf->echoInputField(); ?>
 					<div class="col-sm-6">
 						<div class="form-group pr_10 xs_pr_0">
-	                        <input type="text" class="form-control" placeholder="<?php echo lang('FIRST_NAME'); ?>" name="visitor_first_name">
+	                        <input type="text" class="form-control" placeholder="<?php echo lang('FIRST_NAME'); ?>" name="visitor_first_name" value="<? echo $first_name; ?>">
 	                    </div>
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-	                        <input type="text" class="form-control" placeholder="<?php echo lang('LAST_NAME'); ?>" name="visitor_last_name">
+	                        <input type="text" class="form-control" placeholder="<?php echo lang('LAST_NAME'); ?>" name="visitor_last_name" value="<? echo $last_name; ?>">
 	                    </div>
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group pr_10 xs_pr_0">
-	                        <input type="email" class="form-control" placeholder="<?php echo lang('EMAIL_ADDRESS'); ?>" name="visitor_email">
+	                        <input type="email" class="form-control" placeholder="<?php echo lang('EMAIL_ADDRESS'); ?>" name="visitor_email" value="<? echo $email; ?>">
 	                    </div>
 					</div>
 					<div class="col-sm-6">

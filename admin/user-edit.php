@@ -38,8 +38,8 @@ if(isset($_POST['form1'])) {
     if($valid == 1) {
 
 		// updating the database
-		$statement = $pdo->prepare("UPDATE tbl_user SET full_name=?, email=?, phone=?, status=? WHERE id=?");
-		$statement->execute(array($_POST['full_name'],$_POST['email'],$_POST['phone'],$_POST['status'],$_REQUEST['id']));
+		$statement = $pdo->prepare("UPDATE tbl_user SET full_name=?, email=?, phone=?, status=?, role=? WHERE id=?");
+		$statement->execute(array($_POST['full_name'],$_POST['email'],$_POST['phone'],$_POST['status'],$_POST['role'],$_REQUEST['id']));
 
     	$success_message = 'Информация о пользователе успешно обновлена.';
     }
@@ -170,6 +170,17 @@ foreach ($result as $row) {
 										<label for="" class="col-sm-2 control-label">Телефон </label>
 										<div class="col-sm-4">
 											<input type="text" class="form-control" name="phone" value="<?php echo $phone; ?>">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="" class="col-sm-2 control-label">Роль </label>
+										<div class="col-sm-4">
+											<select name="role">
+												<option value="Admin" <?php if(isset($_POST['role']) && $_POST['role'] == 'Admin') { echo selected; }?>>Администратор</option>
+												<option value="Publisher" <?php if(isset($_POST['role']) && $_POST['role'] == 'Publisher') { echo selected; }?>>Менеджер</option>
+												<option value="User" <?php if(isset($_POST['role']) && $_POST['role'] == 'User') { echo selected; }?>>Пользователь</option>
+											</select>
+											<input type="text" class="form-control" name="phone" value="<?php if(isset($_POST['phone'])) {echo $_POST['phone'];} ?>">
 										</div>
 									</div>
 							        <div class="form-group">

@@ -95,6 +95,11 @@ foreach ($result as $row)
 			echo '<title>'.$row['meta_title_home'].'</title>';
 		}
 	}
+
+	if(isset($page_title))
+	{
+		echo '<title>'.$page_title.'</title>';
+	}
 	?>
 	
 	<!-- Favicon -->
@@ -291,10 +296,27 @@ foreach ($result as $row)
 						</div>
 						<div class="list">
 							<i class="fa fa-phone"></i> <?php echo $contact_phone; ?>
-						</div>
-					</div>
-					<div class="registration">
-						<a hreaf="#">Регистрация</a>
+						</div>						
+						<?php
+						if (isset($_SESSION['user'])){
+							echo '
+							<div class="list">
+								<a href="'.BASE_URL.'/user-profile.php">Профиль: '.$_SESSION['user']['full_name'].'</a>
+							</div>
+							<div class="list">
+								<a href="'.BASE_URL.'/logout.php">Выход</a>
+							</div>';
+						}
+						else {
+							echo '
+							<div class="list">
+								<a href="'.BASE_URL.'/register.php">Регистрация</a>
+							</div>
+							<div class="list">
+								<a href="'.BASE_URL.'/login.php">Вход</a>
+							</div>';
+						}
+						?>
 					</div>
 					<div class="col-md-6 top-social">
 						<ul>

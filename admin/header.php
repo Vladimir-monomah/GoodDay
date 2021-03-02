@@ -168,6 +168,18 @@ if($_SESSION['user']['role']=='Publisher') {
 			        <?php endif; ?>
 
 
+			        <?php 
+						if($_SESSION['user']['role'] == 'Super Admin' 
+					      || $_SESSION['user']['role'] == 'Admin'):
+					?>
+			        <li class="treeview <?php if(($cur_page == 'page-bron.php')) {echo 'active';} ?>">
+			          <a href="page-bron.php">
+			            <i class="fa fa-file-text"></i> <span>Заказы</span>
+			          </a>
+			        </li>
+			        <?php endif; ?>
+
+
 			        <li class="treeview <?php if( ($cur_page == 'menu-main-add.php')||($cur_page == 'menu-main.php')||($cur_page == 'menu-main-edit.php') || ($cur_page == 'menu-footer-add.php')||($cur_page == 'menu-footer.php')||($cur_page == 'menu-footer-edit.php') ) {echo 'active';} ?>">
 						<a href="#">
 							<i class="fa fa-podcast"></i>

@@ -44,25 +44,25 @@ if (isset($_POST['form1'])) {
 
 		// saving into the database
 		$statement = $pdo->prepare("INSERT INTO tbl_user (full_name,email,phone,password,photo,role,status) VALUES (?,?,?,?,?,?,?)");
-		$statement->execute(array($_POST['full_name'],$_POST['email'],$_POST['phone'],md5($_POST['password']),'',$_POST['role'],$_POST['status']));
+		$statement->execute(array($_POST['full_name'],$_POST['email'],$_POST['phone'],md5($_POST['password']),'','User','Active'));
     
     	
     	unset($_POST['full_name']);
     	unset($_POST['email']);
     	unset($_POST['phone']);
 
-    	$success_message = 'Пользователь успешно добавлен.';
+    	$success_message = 'Регистрация прошла успешно!';
     }
 }
 ?>
 
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Добавить пользователя (администратор)</h1>
+		<h1 style="margin-left: 227px;">Регистрация пользователя</h1>
 	</div>
-	<div class="content-header-right">
+	<!-- <div class="content-header-right">
 		<a href="user.php" class="btn btn-primary btn-sm">Посмотреть все</a>
-	</div>
+	</div> -->
 </section>
 
 
@@ -72,11 +72,8 @@ if (isset($_POST['form1'])) {
 		<div class="col-md-12">
 
 			<?php if($error_message): ?>
-			<div class="callout callout-danger">
-			
-			<p>
-			<?php echo $error_message; ?>
-			</p>
+			<div class="error_message" style="margin-left: 260px;">
+				<?php echo $error_message; ?>
 			</div>
 			<?php endif; ?>
 
@@ -110,16 +107,6 @@ if (isset($_POST['form1'])) {
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Роль </label>
-							<div class="col-sm-4">
-								<select class="form-control" name="role">
-  									<option value="Admin" <?php if(isset($_POST['role']) && $_POST['role'] == 'Admin') { echo selected; }?>>Администратор</option>
-  									<option value="Publisher" <?php if(isset($_POST['role']) && $_POST['role'] == 'Publisher') { echo selected; }?>>Менеджер</option>
-  									<option value="User" <?php if(isset($_POST['role']) && $_POST['role'] == 'User') { echo selected; }?>>Пользователь</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Пароль <span>*</span></label>
 							<div class="col-sm-4">
 								<input type="password" class="form-control" name="password">
@@ -131,21 +118,10 @@ if (isset($_POST['form1'])) {
 								<input type="password" class="form-control" name="re_password">
 							</div>
 						</div>
-				        <div class="form-group">
-				            <label for="" class="col-sm-2 control-label">Активный? </label>
-				            <div class="col-sm-6">
-				                <label class="radio-inline">
-				                    <input type="radio" name="status" value="Active" checked>Да
-				                </label>
-				                <label class="radio-inline">
-				                    <input type="radio" name="status" value="Inactive">Нет
-				                </label>
-				            </div>
-				        </div>
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Сохранить</button>
+								<button type="submit" class="btn btn-success pull-left" name="form1">Зарегистрироваться</button>
 							</div>
 						</div>
 					</div>
