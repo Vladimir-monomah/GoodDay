@@ -18,6 +18,11 @@ if(!isset($_SESSION['user'])) {
 // Current Page Access Level check for all pages
 $cur_page = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
 
+if($_SESSION['user']['role']=='User') {
+	header('location: ../user-profile.php');
+		exit;
+}
+
 if($_SESSION['user']['role']=='Admin') {
 	if( $cur_page == 'user.php' || $cur_page == 'user-add.php' || $cur_page == 'user-edit.php' || $cur_page == 'user-delete.php' ) {
 		header('location: index.php');

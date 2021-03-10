@@ -1287,7 +1287,7 @@ if(isset($_POST['form_reservation']))
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-	                        <input type="text" class="form-control" placeholder="<?php echo lang('PHONE'); ?>" name="visitor_phone">
+	                        <input type="text" class="form-control" placeholder="<?php echo lang('PHONE'); ?>+7(XXX) XXX-XX-XX" name="visitor_phone">
 	                    </div>
 					</div>
 					<div class="col-sm-6">
@@ -1297,7 +1297,7 @@ if(isset($_POST['form_reservation']))
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-	                        <input type="text" class="form-control" placeholder="<?php echo lang('TIME'); ?>" name="visitor_time">
+	                        <input type="time" class="form-control" placeholder="<?php echo lang('TIME'); ?>" name="visitor_time">
 	                    </div>
 					</div>
 					<div class="col-sm-12">
