@@ -1156,6 +1156,20 @@ if(isset($_POST['form_reservation']))
         $valid = 0;
         $error_message1 .= 'Please enter your comment.\n';
     }
+	$visitor_date;
+	$visitor_time;
+    if($valid == 1)
+    {
+		$visitor_date = strip_tags($_POST['visitor_date']);
+		$visitor_time = strip_tags($_POST['visitor_time']);
+		
+		// validate date time
+		$datetime = DateTime::createFromFormat('d/m/Y H:i',$visitor_date.' '.$visitor_time);
+		if($datetime->getTimestamp() < time ()){
+			$valid = 0;
+			$error_message1 = 'Дата и время не должны быть меньше текущей';
+		}
+	}
 
     if($valid == 1)
     {
@@ -1164,8 +1178,6 @@ if(isset($_POST['form_reservation']))
 		$visitor_last_name = strip_tags($_POST['visitor_last_name']);
 		$visitor_email = strip_tags($_POST['visitor_email']);
 		$visitor_phone = strip_tags($_POST['visitor_phone']);
-		$visitor_date = strip_tags($_POST['visitor_date']);
-		$visitor_time = strip_tags($_POST['visitor_time']);
 		$visitor_comment = strip_tags($_POST['visitor_comment']);
 
         // sending email

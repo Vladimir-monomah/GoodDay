@@ -28,7 +28,7 @@
         // Datepicker
         dtPicker.datepicker({
             format: 'dd/mm/yyyy',
-            startDate: '-3d'
+            startDate: '-0d'
         });
 
         // Preloader
