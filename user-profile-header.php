@@ -28,8 +28,8 @@ $cur_page = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+
     <div class="skin-blue">
 	<div class="wrapper">
 
-	<?php
-		if(!isset($_SESSION['user'])){
+	<?
+		if(!isset($_SESSION['user_client'])){
 			$error_message = 'Необходимо войти в учётную запись';
 			echo '<div class="content-wrapper">'
 				.'<section class="content">'

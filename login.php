@@ -25,7 +25,7 @@ if(isset($_POST['form1'])) {
                 $error_message .= 'Пароль не совпадает<br>';
             } else {       
             
-				$_SESSION['user'] = $row;
+				$_SESSION['user_client'] = $row;
                 header("location: user-profile.php");
             }
         }

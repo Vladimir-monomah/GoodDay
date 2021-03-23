@@ -1,4 +1,14 @@
-<?php require_once('header.php'); ?>
+<?php require_once('header.php'); 
+
+if(isset($_GET['bron'])){
+	try {
+		$statement = $pdo->prepare("UPDATE tbl_bron SET status=? WHERE id=?");
+		$statement->execute(array('', $_GET['bron']));
+	}
+	catch(Exception $ex) {
+	}
+}
+?>
 
 <section class="content-header">
 	<div class="content-header-left">
@@ -26,13 +36,16 @@
 				  <th>Телефон</th>
 				  <th>Дата</th>
 				  <th>Время</th>
+				  <th>Номер столика</th>
 				  <th>Дополнительная информация</th>
 			  </tr>
 		  </thead>
 		  <tbody>
 			  <?php
 			  $i=0;
-			  $statement = $pdo->prepare("SELECT * FROM tbl_bron");
+			  $statement = $pdo->prepare("SELECT tbl_bron.*, tbl_table.table_name "
+			  	."FROM tbl_bron "
+				."Left Join tbl_table On tbl_bron.table_id = tbl_table.id");
 			  $statement->execute();
 			  $result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 			  foreach ($result as $row) {
@@ -46,6 +59,17 @@
 					  <td><?php echo $row['phone']; ?></td>
 					  <td><?php echo date('d.m.Y',  $row['date']); ?></td>
 					  <td><?php echo $row['time']; ?></td>
+					  <td>
+					  	<?php echo $row['table_name'];
+						  	if( $row['status'] == 'active') {
+						?>
+								<a href="page-bron.php?bron=<?php echo $row['id']; ?>" class="btn btn-primary btn-xs" style="margin-left: 40px;">
+									Освободить
+								</a>
+						<?
+						}
+						?>
+					  </td>
 					  <td><?php echo $row['message']; ?></td>
 				  </tr>
 				  <?php

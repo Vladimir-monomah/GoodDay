@@ -21,7 +21,7 @@ if(isset($_POST['form1'])) {
 	    } else {
 	    	// current email address that is in the database
 	    	$statement = $pdo->prepare("SELECT * FROM tbl_user WHERE id=?");
-            $statement->execute(array($_SESSION['user']['id']));
+            $statement->execute(array($_SESSION['user_client']['id']));
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 			foreach($result as $row) {
 				$current_email = $row['email'];
@@ -41,15 +41,15 @@ if(isset($_POST['form1'])) {
 
 		// updating the database
 		$statement = $pdo->prepare("UPDATE tbl_user SET full_name=?, email=?, phone=? WHERE id=?");
-		$statement->execute(array($_POST['full_name'],$_POST['email'],$_POST['phone'],$_SESSION['user']['id']));
+		$statement->execute(array($_POST['full_name'],$_POST['email'],$_POST['phone'],$_SESSION['user_client']['id']));
     	$success_message = 'Информация о пользователе успешно обновлена.';
         
         // updating SESSION user
         $statement = $pdo->prepare("SELECT * FROM tbl_user WHERE id=?");
-        $statement->execute(array($_SESSION['user']['id']));
+        $statement->execute(array($_SESSION['user_client']['id']));
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         foreach($result as $row) {
-            $_SESSION['user'] = $row;
+            $_SESSION['user_client'] = $row;
         }
         
         header("refresh: 0"); 
@@ -58,7 +58,7 @@ if(isset($_POST['form1'])) {
 
 
 $statement = $pdo->prepare("SELECT * FROM tbl_user WHERE id=?");
-$statement->execute(array($_SESSION['user']['id']));
+$statement->execute(array($_SESSION['user_client']['id']));
 // $statement->rowCount();
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);							
 foreach ($result as $row) {

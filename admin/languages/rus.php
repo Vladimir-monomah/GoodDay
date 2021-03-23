@@ -27,7 +27,8 @@ function lang($param){
         'FIND_US_ON_MAP'      => 'Найдите нас на карте',
         'SEND_MESSAGE'        => 'Отправить сообщение',
         'RESERVATION_BUTTON'  => 'Подтвердить бронирование',
-        'SOCIAL_MEDIA_TITLE'  => 'Действия в социальных сетях'
+        'SOCIAL_MEDIA_TITLE'  => 'Действия в социальных сетях',       
+        'CHOOSE_TABLE'        => 'Выберите столик'
     );
     return $lang[$param];
 }

@@ -23,7 +23,7 @@ if(isset($_POST['form2'])) {
 
     	// updating the database
 		$statement = $pdo->prepare("UPDATE tbl_user SET password=? WHERE id=?");
-		$statement->execute(array(md5($_POST['password']),$_SESSION['user']['id']));
+		$statement->execute(array(md5($_POST['password']),$_SESSION['user_client']['id']));
 
     	$success_message = 'Пароль пользователя успешно обновлен.';
     }

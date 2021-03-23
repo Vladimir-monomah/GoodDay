@@ -1167,7 +1167,7 @@ if(isset($_POST['form_reservation']))
 		$datetime = DateTime::createFromFormat('d/m/Y H:i',$visitor_date.' '.$visitor_time);
 		if($datetime->getTimestamp() < time ()){
 			$valid = 0;
-			$error_message1 = 'Дата и время не должны быть меньше текущей';
+			$error_message1 .= 'Дата и время не должны быть меньше текущей\n';
 		}
 	}
 
@@ -1179,6 +1179,7 @@ if(isset($_POST['form_reservation']))
 		$visitor_email = strip_tags($_POST['visitor_email']);
 		$visitor_phone = strip_tags($_POST['visitor_phone']);
 		$visitor_comment = strip_tags($_POST['visitor_comment']);
+		$table_id = strip_tags($_POST['visitor_table']);
 
         // sending email
         $to_admin = $reservation_form_email;
@@ -1231,14 +1232,40 @@ if(isset($_POST['form_reservation']))
 		// saving into the database	
 		try{
 			$user_id = null;
-			if(isset($_SESSION['user'])){
-				$user_id = $_SESSION['user']['id'];
+			if(isset($_SESSION['user_client'])){
+				$user_id = $_SESSION['user_client']['id'];
 			}
 
-			$date_array = explode('/', $visitor_date);
-			$correct_date = date_create($date_array[2].'-'.$date_array[1].'-'.$date_array[0]);
-			$statement = $pdo->prepare("INSERT INTO tbl_bron (first_name, last_name, user_id, email, phone, date, time, message) VALUES (?,?,?,?,?,?,?,?)");
-			$statement->execute(array($visitor_first_name, $visitor_last_name, $user_id, $visitor_email, $visitor_phone, $correct_date->getTimestamp(), $visitor_time, $visitor_comment));
+			// validate choosed table
+			$statement = $pdo->prepare("SELECT id FROM tbl_table t WHERE "
+			."EXISTS(select 1 from tbl_bron b where b.table_id = t.id and b.status = 'active') "
+			."and t.id = $table_id");
+			$statement->execute();
+			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+			foreach ($result as $row) {
+				$valid = 0;
+				$error_message1 .= 'Стол уже занят!\n';
+				break;
+			}
+
+			if($valid == 1)
+			{
+				$date_array = explode('/', $visitor_date);
+				$correct_date = date_create($date_array[2].'-'.$date_array[1].'-'.$date_array[0]);
+				$statement = $pdo->prepare("INSERT INTO tbl_bron (first_name, last_name, user_id, email, phone, date, time, message, table_id, status) "
+				."VALUES (?,?,?,?,?,?,?,?,?,?)");
+				$statement->execute(array(
+					$visitor_first_name,
+					$visitor_last_name,
+					$user_id,
+					$visitor_email,
+					$visitor_phone,
+					$correct_date->getTimestamp(),
+					$visitor_time,
+					$visitor_comment,
+					$table_id,
+					'active'));
+			}
 		}
 		catch (Exception $ex)
 		{
@@ -1260,10 +1287,10 @@ if(isset($_POST['form_reservation']))
 				$first_name='';
 				$last_name='';
 				$email='';
-				if(isset($_SESSION['user'])){
-					$email = $_SESSION['user']['email'];
+				if(isset($_SESSION['user_client'])){
+					$email = $_SESSION['user_client']['email'];
 
-					$names = explode(' ', $_SESSION['user']['full_name']);
+					$names = explode(' ', $_SESSION['user_client']['full_name']);
 					$first_name = $names[0];
 					if(count($names) > 1){
 						$last_name = $names[1];
@@ -1310,6 +1337,24 @@ if(isset($_POST['form_reservation']))
 					<div class="col-sm-6">
 						<div class="form-group">
 	                        <input type="time" class="form-control" placeholder="<?php echo lang('TIME'); ?>" name="visitor_time">
+	                    </div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<select class="form-control" name="visitor_table">
+				            		<option value=""><? echo lang('CHOOSE_TABLE'); ?></option>
+				            		<?php
+						            	$statement = $pdo->prepare("SELECT id, table_name FROM tbl_table t WHERE "
+											."NOT EXISTS(select 1 from tbl_bron b where b.table_id = t.id and b.status = 'active')");
+						            	$statement->execute();
+						            	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+						            	foreach ($result as $row) {
+						            		?>
+											<option value="<?php echo $row['id']; ?>"><?php echo $row['table_name']; ?></option>
+						            		<?php
+						            	}
+					            	?>
+				            	</select>
 	                    </div>
 					</div>
 					<div class="col-sm-12">

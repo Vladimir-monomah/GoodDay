@@ -298,10 +298,10 @@ foreach ($result as $row)
 							<i class="fa fa-phone"></i> <?php echo $contact_phone; ?>
 						</div>						
 						<?php
-						if (isset($_SESSION['user'])){
+						if (isset($_SESSION['user_client'])){
 							echo '
 							<div class="list">
-								<a href="'.BASE_URL.'/user-profile.php">Профиль: '.$_SESSION['user']['full_name'].'</a>
+								<a href="'.BASE_URL.'/user-profile.php">Профиль: '.$_SESSION['user_client']['full_name'].'</a>
 							</div>
 							<div class="list">
 								<a href="'.BASE_URL.'/logout.php">Выход</a>
