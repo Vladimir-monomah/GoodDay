@@ -43,7 +43,7 @@ if(isset($_GET['bron'])){
 		  <tbody>
 			  <?php
 			  $i=0;
-			  $statement = $pdo->prepare("SELECT tbl_bron.*, tbl_table.table_name "
+			  $statement = $pdo->prepare("SELECT tbl_bron.*, tbl_table.table_name, tbl_table.hidden "
 			  	."FROM tbl_bron "
 				."Left Join tbl_table On tbl_bron.table_id = tbl_table.id");
 			  $statement->execute();
@@ -60,7 +60,9 @@ if(isset($_GET['bron'])){
 					  <td><?php echo date('d.m.Y',  $row['date']); ?></td>
 					  <td><?php echo $row['time']; ?></td>
 					  <td>
-					  	<?php echo $row['table_name'];
+					  	<?php
+						  	echo $row['table_name'];
+							echo $row['hidden'] == '1' ? '(скрытый)' : '';
 						  	if( $row['status'] == 'active') {
 						?>
 								<a href="page-bron.php?bron=<?php echo $row['id']; ?>" class="btn btn-primary btn-xs" style="margin-left: 40px;">

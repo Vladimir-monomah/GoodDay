@@ -262,6 +262,7 @@ if($_SESSION['user']['role']=='Publisher') {
 							<li><a href="testimonial.php"><i class="fa fa-circle-o"></i> Отзыв</a></li>
 							
 							<li><a href="service.php"><i class="fa fa-circle-o"></i> Служба</a></li>
+							<li><a href="table.php"><i class="fa fa-circle-o"></i> Столики</a></li>
 						</ul>
 					</li>
 					

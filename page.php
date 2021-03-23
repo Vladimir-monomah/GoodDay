@@ -1238,8 +1238,9 @@ if(isset($_POST['form_reservation']))
 
 			// validate choosed table
 			$statement = $pdo->prepare("SELECT id FROM tbl_table t WHERE "
-			."EXISTS(select 1 from tbl_bron b where b.table_id = t.id and b.status = 'active') "
-			."and t.id = $table_id");
+				."(t.hidden = '1' "
+				."or EXISTS(select 1 from tbl_bron b where b.table_id = t.id and b.status = 'active')) "
+				."and t.id = $table_id");
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 			foreach ($result as $row) {
@@ -1344,13 +1345,14 @@ if(isset($_POST['form_reservation']))
 							<select class="form-control" name="visitor_table">
 				            		<option value=""><? echo lang('CHOOSE_TABLE'); ?></option>
 				            		<?php
-						            	$statement = $pdo->prepare("SELECT id, table_name FROM tbl_table t WHERE "
-											."NOT EXISTS(select 1 from tbl_bron b where b.table_id = t.id and b.status = 'active')");
+						            	$statement = $pdo->prepare("SELECT id, table_name, seats_count FROM tbl_table t WHERE "
+											."t.hidden = '0' "
+											."and NOT EXISTS(select 1 from tbl_bron b where b.table_id = t.id and b.status = 'active')");
 						            	$statement->execute();
 						            	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 						            	foreach ($result as $row) {
 						            		?>
-											<option value="<?php echo $row['id']; ?>"><?php echo $row['table_name']; ?></option>
+											<option value="<?php echo $row['id']; ?>"><?php echo $row['table_name'].' (мест: '.$row['seats_count'].')'; ?></option>
 						            		<?php
 						            	}
 					            	?>
