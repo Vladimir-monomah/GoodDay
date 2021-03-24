@@ -1008,7 +1008,7 @@ if(isset($_POST['form_contact']))
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" placeholder="<?php echo lang('PHONE'); ?>"  name="visitor_phone">
+                            <input type="text" class="form-control" placeholder="<?php echo lang('PHONE'); ?>"  name="visitor_phone" onkeyup="this.value = this.value.replace(/[^\d]/g,'');">
                         </div>
                     </div>
                     <div class="form-group">

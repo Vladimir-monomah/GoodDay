@@ -103,7 +103,7 @@ if (isset($_POST['form1'])) {
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Телефон </label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="phone" value="<?php if(isset($_POST['phone'])) {echo $_POST['phone'];} ?>">
+								<input type="text" class="form-control" name="phone" value="<?php if(isset($_POST['phone'])) {echo $_POST['phone'];} ?>" onkeyup="this.value = this.value.replace(/[^\d]/g,'');">
 							</div>
 						</div>
 						<div class="form-group">
