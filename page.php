@@ -1335,6 +1335,21 @@ if(isset($_POST['form_reservation']))
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
 				<form action="" class="form-horizontal cform-2" method="post">
+					<script>					
+						function setTimeoutFunc(fn, scope, timeout){
+							setTimeout(function(){
+								fn.call(scope);
+							}, timeout);
+						}
+
+						function validateControl(inputcontrol, isKek) {
+							return !inputcontrol.validity.badInput
+								&& !inputcontrol.validity.customError
+								&& !inputcontrol.validity.rangeUnderflow
+								&& !inputcontrol.validity.rangeOverflow
+								&& !inputcontrol.validity.typeMismatch;
+						}
+					</script>
 					<?php $csrf->echoInputField(); ?>
 					<div class="col-sm-6">
 						<div class="form-group pr_10 xs_pr_0">
@@ -1363,7 +1378,10 @@ if(isset($_POST['form_reservation']))
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-	                        <input type="time" class="form-control" placeholder="<?php echo lang('TIME'); ?>" name="visitor_time" min="08:00" max="21:00">
+	                        <input type="time" class="form-control" placeholder="<?php echo lang('TIME'); ?>"
+								name="visitor_time"
+								min="08:00" max="22:00"
+								onchange="if(!validateControl(this)) setTimeoutFunc(function(){ if (!validateControl(this, true)) this.value = this.min;}, this, 1000);">
 	                    </div>
 					</div>
 					<div class="col-sm-6">
@@ -1405,7 +1423,7 @@ if(isset($_POST['form_reservation']))
 	                        <input type="number" class="form-control" min ="1" max ="1" placeholder="<?php echo lang('People'); ?>" 
 							readOnly=false
 							name="visitor_people"
-							onkeyup="if(!this.value || this.value > this. max || this.value < this.min) this.value = this.max;">
+							onkeyup="if(!validateControl(this)) this.value = this.max;">
 	                    </div>
 					</div>
 					<div class="col-sm-12">
