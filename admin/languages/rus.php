@@ -28,7 +28,8 @@ function lang($param){
         'SEND_MESSAGE'        => 'Отправить сообщение',
         'RESERVATION_BUTTON'  => 'Подтвердить бронирование',
         'SOCIAL_MEDIA_TITLE'  => 'Действия в социальных сетях',       
-        'CHOOSE_TABLE'        => 'Выберите столик'
+        'CHOOSE_TABLE'        => 'Выберите столик',
+        'People'              =>'Количество людей'
     );
     return $lang[$param];
 }

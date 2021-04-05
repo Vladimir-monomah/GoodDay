@@ -37,6 +37,7 @@ if(isset($_GET['bron'])){
 				  <th>Дата</th>
 				  <th>Время</th>
 				  <th>Номер столика</th>
+				  <th>Количество людей</th>
 				  <th>Дополнительная информация</th>
 			  </tr>
 		  </thead>
@@ -62,7 +63,7 @@ if(isset($_GET['bron'])){
 					  <td>
 					  	<?php
 						  	echo $row['table_name'];
-							echo $row['hidden'] == '1' ? '(скрытый)' : '';
+							echo $row['hidden'] == '1' ? '(скрытый)' : '';							
 						  	if( $row['status'] == 'active') {
 						?>
 								<a href="page-bron.php?bron=<?php echo $row['id']; ?>" class="btn btn-primary btn-xs" style="margin-left: 40px;">
@@ -72,6 +73,7 @@ if(isset($_GET['bron'])){
 						}
 						?>
 					  </td>
+					  <td><? echo $row['people_count'];?></td>
 					  <td><?php echo $row['message']; ?></td>
 				  </tr>
 				  <?php

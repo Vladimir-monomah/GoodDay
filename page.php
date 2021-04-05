@@ -932,6 +932,7 @@ if(isset($_POST['form_contact']))
 		$visitor_name = strip_tags($_POST['visitor_name']);
 		$visitor_email = strip_tags($_POST['visitor_email']);
 		$visitor_phone = strip_tags($_POST['visitor_phone']);
+		$visitor_people = strip_tags($_POST['visitor_people']);
 		$visitor_comment = strip_tags($_POST['visitor_comment']);
 
         // sending email
@@ -974,7 +975,11 @@ if(isset($_POST['form_contact']))
 }
 ?>
 				
-				<?php
+<section class="contact">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<?php echo $page_content;
 				if($error_message1 != '') {
 					echo "<script>alert('".$error_message1."')</script>";
 				}
@@ -982,11 +987,6 @@ if(isset($_POST['form_contact']))
 					echo "<script>alert('".$success_message1."')</script>";
 				}
 				?>
-<section class="contact">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<?php echo $page_content; ?>
 			</div>
 		</div>
 		<div class="row">
@@ -1109,19 +1109,19 @@ if(isset($_POST['form_reservation']))
     if(empty($_POST['visitor_first_name']))
     {
         $valid = 0;
-        $error_message1 .= 'Please enter your first name.\n';
+        $error_message1 .= 'Пожалуйста, введите ваше Имя!<br>';
     }
 
     if(empty($_POST['visitor_last_name']))
     {
         $valid = 0;
-        $error_message1 .= 'Please enter your last name.\n';
+        $error_message1 .= 'Пожалуйста, введите вашу Фамилию!<br>';
     }
 
     if(empty($_POST['visitor_email']))
     {
         $valid = 0;
-        $error_message1 .= 'Please enter your email address.\n';
+        $error_message1 .= 'Пожалуйста, введите ваш адрес!<br>';
     }
     else
     {
@@ -1129,33 +1129,39 @@ if(isset($_POST['form_reservation']))
         if(!filter_var($_POST['visitor_email'], FILTER_VALIDATE_EMAIL))
         {
             $valid = 0;
-            $error_message1 .= 'Please enter a valid email address.\n';
+            $error_message1 .= 'Пожалуйста, введите ваш Email!<br>';
         }
     }
 
     if(empty($_POST['visitor_phone']))
     {
         $valid = 0;
-        $error_message1 .= 'Please enter your phone number.\n';
+        $error_message1 .= 'Пожалуйста, введите ваш телефон!<br>';
     }
 
     if(empty($_POST['visitor_date']))
     {
         $valid = 0;
-        $error_message1 .= 'Please enter reservation date.\n';
+        $error_message1 .= 'Пожалуйста, введите вашу дату брони!<br>';
     }
 
     if(empty($_POST['visitor_time']))
     {
         $valid = 0;
-        $error_message1 .= 'Please enter reservation time.\n';
+        $error_message1 .= 'Пожалуйста, введите ваше время брони!<br>';
     }
 
-    if(empty($_POST['visitor_comment']))
+	if(empty($_POST['visitor_people']))
     {
         $valid = 0;
-        $error_message1 .= 'Please enter your comment.\n';
+        $error_message1 .= 'Пожалуйста, введите количество человек!<br>';
     }
+
+    // if(empty($_POST['visitor_comment']))
+    // {
+    //     $valid = 0;
+    //     $error_message1 .= 'Пожалуйста, напишите комментарий к заказу!<br>';
+    // }
 	$visitor_date;
 	$visitor_time;
     if($valid == 1)
@@ -1180,6 +1186,7 @@ if(isset($_POST['form_reservation']))
 		$visitor_phone = strip_tags($_POST['visitor_phone']);
 		$visitor_comment = strip_tags($_POST['visitor_comment']);
 		$table_id = strip_tags($_POST['visitor_table']);
+		$visitor_people = strip_tags($_POST['visitor_people']);
 
         // sending email
         $to_admin = $reservation_form_email;
@@ -1210,6 +1217,10 @@ if(isset($_POST['form_reservation']))
 <tr>
 <td>Time</td>
 <td>'.$visitor_time.'</td>
+</tr>
+<tr>
+<td>People</td>
+<td>'.$visitor_people.'</td>
 </tr>
 <tr>
 <td>Comment</td>
@@ -1245,7 +1256,7 @@ if(isset($_POST['form_reservation']))
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 			foreach ($result as $row) {
 				$valid = 0;
-				$error_message1 .= 'Стол уже занят!\n';
+				$error_message1 .= 'Стол уже занят!<br>';
 				break;
 			}
 
@@ -1253,8 +1264,8 @@ if(isset($_POST['form_reservation']))
 			{
 				$date_array = explode('/', $visitor_date);
 				$correct_date = date_create($date_array[2].'-'.$date_array[1].'-'.$date_array[0]);
-				$statement = $pdo->prepare("INSERT INTO tbl_bron (first_name, last_name, user_id, email, phone, date, time, message, table_id, status) "
-				."VALUES (?,?,?,?,?,?,?,?,?,?)");
+				$statement = $pdo->prepare("INSERT INTO tbl_bron (first_name, last_name, user_id, email, phone, date, time, message, table_id, people_count, status) "
+				."VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 				$statement->execute(array(
 					$visitor_first_name,
 					$visitor_last_name,
@@ -1265,6 +1276,7 @@ if(isset($_POST['form_reservation']))
 					$visitor_time,
 					$visitor_comment,
 					$table_id,
+					$visitor_people,
 					'active'));
 			}
 		}
@@ -1276,39 +1288,53 @@ if(isset($_POST['form_reservation']))
 }
 ?>
 				
-				<?php
-				if($error_message1 != '') {
-					echo "<script>alert(\"".$error_message1."\")</script>";
-				}
-				else
-				if($success_message1 != '') {
-					echo "<script>alert('".$success_message1."')</script>";
-				}
-
-				$first_name='';
-				$last_name='';
-				$email='';
-				if(isset($_SESSION['user_client'])){
-					$email = $_SESSION['user_client']['email'];
-
-					$names = explode(' ', $_SESSION['user_client']['full_name']);
-					$first_name = $names[0];
-					if(count($names) > 1){
-						$last_name = $names[1];
-					}
-				}
-				?>
 <section class="contact">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<?php echo $page_content; ?>
+				<?php 				
+				echo $page_content; 
+				
+				?>
 			</div>
 		</div>
+	
+		<?
+
+		
+		if($error_message1 != '') {
+			echo '<div class="row">';
+
+			echo "<div class=\"error_message\" style=\"margin-left: 260px;\">"
+			.$error_message1
+			."</div>";
+
+			echo '</div>';	
+		}
+		else
+		if($success_message1 != '') {
+			echo "<script>alert('".$success_message1."')</script>";
+		}
+
+		$first_name='';
+		$last_name='';
+		$email='';
+		if(isset($_SESSION['user_client'])){
+			$email = $_SESSION['user_client']['email'];
+
+			$names = explode(' ', $_SESSION['user_client']['full_name']);
+			$first_name = $names[0];
+			if(count($names) > 1){
+				$last_name = $names[1];
+			}
+		}
+
+		?>
+					
 		<div class="row">			
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
-				<form action="" class="form-horizontal cform-1" method="post">
+				<form action="" class="form-horizontal cform-2" method="post">
 					<?php $csrf->echoInputField(); ?>
 					<div class="col-sm-6">
 						<div class="form-group pr_10 xs_pr_0">
@@ -1327,7 +1353,7 @@ if(isset($_POST['form_reservation']))
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-	                        <input type="text" class="form-control" placeholder="<?php echo lang('PHONE'); ?>+7(XXX) XXX-XX-XX" name="visitor_phone">
+	                        <input type="text" class="form-control" placeholder="<?php echo lang('PHONE'); ?>+7(XXX) XXX-XX-XX" onkeyup="this.value = this.value.replace(/[^\d]/g,'');" name="visitor_phone">
 	                    </div>
 					</div>
 					<div class="col-sm-6">
@@ -1337,12 +1363,25 @@ if(isset($_POST['form_reservation']))
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-	                        <input type="time" class="form-control" placeholder="<?php echo lang('TIME'); ?>" name="visitor_time">
+	                        <input type="time" class="form-control" placeholder="<?php echo lang('TIME'); ?>" name="visitor_time" min="08:00" max="21:00">
 	                    </div>
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-							<select class="form-control" name="visitor_table">
+							<script>
+								function onChangeTable(tableSelect){
+									var peopleCountInput = document.getElementsByName('visitor_people')[0],
+										peopleCountChoosed = tableSelect.options[tableSelect.selectedIndex].getAttribute('peoples');
+										peopleCountInput.readOnly = !(peopleCountInput && peopleCountChoosed);
+										if(!peopleCountInput.readOnly){
+											peopleCountInput.max = peopleCountInput.value = peopleCountChoosed;																						
+										}
+										else {
+											peopleCountInput.value = null;
+										}
+								}
+							</script>
+							<select class="form-control" name="visitor_table" style="width: 97%;" onchange="onChangeTable(this);">
 				            		<option value=""><? echo lang('CHOOSE_TABLE'); ?></option>
 				            		<?php
 						            	$statement = $pdo->prepare("SELECT id, table_name, seats_count FROM tbl_table t WHERE "
@@ -1352,11 +1391,21 @@ if(isset($_POST['form_reservation']))
 						            	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 						            	foreach ($result as $row) {
 						            		?>
-											<option value="<?php echo $row['id']; ?>"><?php echo $row['table_name'].' (мест: '.$row['seats_count'].')'; ?></option>
+											<option value="<?php echo $row['id']; ?>" peoples="<?php echo $row['seats_count']; ?>" >
+												<?php echo $row['table_name'].' (мест: '.$row['seats_count'].')'; ?>
+											</option>
 						            		<?php
 						            	}
 					            	?>
-				            	</select>
+				            </select>
+	                    </div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+	                        <input type="number" class="form-control" min ="1" max ="1" placeholder="<?php echo lang('People'); ?>" 
+							readOnly=false
+							name="visitor_people"
+							onkeyup="if(!this.value || this.value > this. max || this.value < this.min) this.value = this.max;">
 	                    </div>
 					</div>
 					<div class="col-sm-12">
