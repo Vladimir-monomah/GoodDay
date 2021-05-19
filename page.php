@@ -1420,6 +1420,25 @@ if(isset($_POST['form_reservation']))
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
+							<select class="form-control" name="visitor_table" style="width: 97%;">
+				            		<option value=""><? echo lang('CHOOSE_MENU'); ?></option>
+				            		<?php
+						            	$statement = $pdo->prepare("SELECT food_menu_id, food_menu_name FROM tbl_food_menu f WHERE "
+											."and NOT EXISTS(select 1 from tbl_bron b where b.food_menu_id = f.food_menu_id)");
+						            	$statement->execute();
+						            	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+						            	foreach ($result as $row) {
+						            		?>
+											<option value="<?php echo $row['food_menu_id']; ?>" >
+											</option>
+						            		<?php
+						            	}
+					            	?>
+				            </select>
+	                    </div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
 	                        <input type="number" class="form-control" min ="1" max ="1" placeholder="<?php echo lang('People'); ?>" 
 							readOnly=false
 							name="visitor_people"
