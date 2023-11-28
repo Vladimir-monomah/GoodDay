@@ -12,10 +12,10 @@ $dbhost = 'localhost';
 $dbname = 'cafe';
 
 // Database Username
-$dbuser = 'mysql';
+$dbuser = 'root';
 
 // Database Password
-$dbpass = 'mysql';
+$dbpass = '';
 
 // Defining base url
 
